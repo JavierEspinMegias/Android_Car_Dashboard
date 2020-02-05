@@ -11,8 +11,7 @@
         android:icon="@drawable/ic_car_maps" />
 
     <item android:id="@+id/action_add"
-        android:title="@string/menu_navi"
-        android:icon="@android:drawable/ic_menu_add" />
+        android:title="" />
 
     <item android:id="@+id/action_search"
         android:title="@string/menu_music"
