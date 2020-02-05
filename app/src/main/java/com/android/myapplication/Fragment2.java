@@ -4,14 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.Fragment;
 
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
-public class Fragment2 extends Fragment {
+public class Fragment2 extends Fragment implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -22,6 +26,8 @@ public class Fragment2 extends Fragment {
     private String mParam2;
 
     private OnFragmentInterfaceCom mListener;
+
+    public GestureDetectorCompat mDetector;
 
     public Fragment2() {
         // Required empty public constructor
@@ -49,6 +55,18 @@ public class Fragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_fragment2, container, false);
 
+
+        mDetector = new GestureDetectorCompat(v.getContext(), this);
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Toast.makeText(getContext(), "asdasdasd", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+
+
         return v;
     }
 
@@ -75,4 +93,52 @@ public class Fragment2 extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        Toast.makeText(getContext(), "asdasdas", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent motionEvent) {
+        Toast.makeText(getContext(), "asdasdas", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+        Toast.makeText(getContext(), "asdasdas", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        Toast.makeText(getContext(), "asdasdas", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
 }

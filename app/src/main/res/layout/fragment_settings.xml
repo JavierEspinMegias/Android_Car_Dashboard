@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragSettings"
+    android:transitionName="transition">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Switch
+                android:id="@+id/switchDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:switchMinWidth="90dp"
+                android:button="@android:drawable/btn_radio"
+                android:switchPadding="22dp"
+                android:text="Day Night Mode" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/switchSongsDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:switchMinWidth="90dp"
+                android:textSize="18dp"
+                android:button="@android:drawable/btn_radio"
+                android:switchPadding="44dp"
+                android:text="Add Download Folder" />
+
+            <Switch
+                android:id="@+id/switchSongsMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:switchMinWidth="90dp"
+                android:textSize="18dp"
+                android:button="@android:drawable/btn_radio"
+                android:switchPadding="44dp"
+                android:text="Add Music Folder" />
+
+            <Switch
+                android:id="@+id/switchSongsAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:switchMinWidth="90dp"
+                android:textSize="18dp"
+                android:button="@android:drawable/btn_radio"
+                android:switchPadding="44dp"
+                android:text="Add All Music Paths" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

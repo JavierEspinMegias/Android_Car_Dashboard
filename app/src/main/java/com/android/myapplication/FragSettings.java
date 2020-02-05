@@ -1,15 +1,11 @@
 package com.android.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -30,7 +26,7 @@ public class FragSettings extends Fragment {
 
     private OnFragmentInterfaceCom mListener;
 
-    private Switch dayNight;
+    private Switch dayNight, downloadPath, musicPath, allPaths;
 
     public FragSettings() {
         // Required empty public constructor
@@ -58,10 +54,15 @@ public class FragSettings extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_fragment5, container, false);
+        final View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
         dayNight = (Switch)v.findViewById(R.id.switchDay);
+        downloadPath = (Switch)v.findViewById(R.id.switchSongsDownload);
+        musicPath = (Switch)v.findViewById(R.id.switchSongsMusic);
+        allPaths = (Switch)v.findViewById(R.id.switchSongsAll);
+
         checkDayNight(v);
+        checkPaths(v);
 
         dayNight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -80,8 +81,57 @@ public class FragSettings extends Fragment {
             }
         });
 
+        downloadPath.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                int download = preferences.getInt("downloadPath", 0);
+                if (download == 0){
+                    editor.putInt("downloadPath", 1).apply();
+                }else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor.putInt("downloadPath", 0).apply();
+                }
+            }
+        });
+
+        musicPath.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                int music = preferences.getInt("musicPath", 0);
+                if (music == 0){
+                    editor.putInt("musicPath", 1).apply();
+                }else{
+                    editor.putInt("musicPath", 0).apply();
+                }
+            }
+        });
+
+        allPaths.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                int all = preferences.getInt("allPaths", 0);
+                if (all == 0){
+                    editor.putInt("allPaths", 1).apply();
+
+                }else{
+                    editor.putInt("allPaths", 0).apply();
+                }
+            }
+        });
+
+
+
+
+
         return v;
     }
+
 
 
     @Override
@@ -110,6 +160,12 @@ public class FragSettings extends Fragment {
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+    }
+
+    public void checkPaths(View v){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String[] paths = new String[]{"downloadPath","musicPath","allPaths"};
+
     }
 
 }

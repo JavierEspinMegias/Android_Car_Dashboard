@@ -3,81 +3,268 @@ package com.android.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements OnFragmentInterfaceCom {
+
+public class MainActivity extends AppCompatActivity implements OnFragmentInterfaceCom{
 
     private BottomNavigationView menuBottom;
-    private BottomNavigationItemView but1, but2, but3;
+
+    public ArrayList<HashMap<String,String>> songList;
+    final String download_path =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"";
+    final String music_path =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)+"";
+    final String external_path =  Environment.getExternalStorageDirectory().getAbsolutePath()+"";
+    public FragmentMusic frag_music;
+
+    public MediaPlayer carMediaPlayer = new MediaPlayer();
+    public HashMap res;
+    public int music_index;
+    public boolean isPlaying;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
+        checkDayNight();
         setContentView(R.layout.activity_main);
 
-        checkDayNight();
+        checkPermissions();
 
+        isPlaying = false;
+        loadSongs();
+
+        loadMenu();
+
+
+    }
+
+
+    //      SET FRAGMENTS ON MENU
+    public void loadMenu(){
         menuBottom = (BottomNavigationView)findViewById(R.id.bottom_navigation);
         menuBottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Persona person1 = new Persona("Pepico");
                 switch (item.getItemId()) {
-                    case R.id.action_search:
-                        FragUsers frag1 = FragUsers.newInstanceData("persona", person1);
-                        getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).setCustomAnimations(R.animator.fade_in, R.animator.fade_out).replace(R.id.frame_fragments, frag1).commit();
+                    case R.id.action_music:
+                        frag_music = FragmentMusic.newInstance("", "");
+                        loadFragment(frag_music).addToBackStack("music").commit();
+                        item.setCheckable(false);
+                        item.setChecked(false);
+
                         break;
-                    case R.id.action_add:
+                    case R.id.action_maps:
                         Fragment2 frag2 = Fragment2.newInstance("", "");
-                        getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).setCustomAnimations(R.animator.fade_in, R.animator.fade_out).replace(R.id.frame_fragments, frag2).commit();
+                        loadFragment(frag2).addToBackStack("maps").commit();
                         break;
-                    case R.id.action_camera:
+                    case 1:
                         Fragment3 frag3 = Fragment3.newInstance("", "");
-                        getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).setCustomAnimations(R.animator.fade_in, R.animator.fade_out).replace(R.id.frame_fragments, frag3).commit();
+                        loadFragment(frag3).addToBackStack("1").commit();;
                         break;
-                    case R.id.action_navi:
+                    case R.id.action_search:
                         Fragment4 frag4 = Fragment4.newInstance("", "");
-                        getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).setCustomAnimations(R.animator.fade_in, R.animator.fade_out).replace(R.id.frame_fragments, frag4).commit();
+                        loadFragment(frag4).addToBackStack("search").commit();
                         break;
                     case R.id.action_settings:
                         FragSettings frag5 = FragSettings.newInstance("", "");
-                        getSupportFragmentManager().beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).setCustomAnimations(R.animator.fade_in, R.animator.fade_out).replace(R.id.frame_fragments, frag5).commit();
+                        loadFragment(frag5).addToBackStack("settings").commit();
                         break;
                 }
+
                 return true;
             }
-        });
+        })
+    ;}
 
+
+    public FragmentTransaction loadFragment(Fragment loadFrag){
+        getSupportFragmentManager().popBackStack();
+        return getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                .replace(R.id.frame_fragments, loadFrag)
+                .addSharedElement((View)findViewById(R.id.frame_fragments), "transition");
     }
 
     @Override
     public void onFragmentMessage(String TAG, Object data) {
-        if (TAG.equals("TAGFragment1")){
-            //MAIN GESTIONARA INFORMACION PROVENIENTE DEL Fragment 1
-            Toast.makeText(this, "info recibida del frag1: "+data.toString(), Toast.LENGTH_SHORT).show();
+        if (TAG.equals("playing_music")){
+            Toast.makeText(this, "Playing...", Toast.LENGTH_SHORT).show();
+            if (!isPlaying){
+                playAll();
+                isPlaying = true;
+            }
+
         }
-        else if (TAG.equals("TAGFragment2")){
-            //MAIN GESTIONARA INFORMACION PROVENIENTE DEL Fragment 2
+        else if (TAG.equals("stop_music") && isPlaying){
+            if (carMediaPlayer.isPlaying()){
+                carMediaPlayer.pause();
+                carMediaPlayer.stop();
+                isPlaying = false;
+            }
         }
-        else if (TAG.equals("TAGFragment3")){
-            //MAIN GESTIONARA INFORMACION PROVENIENTE DEL Fragment 3
+        else if (TAG.equals("next_song") && isPlaying){
+            nextSong();
         }
     }
 
 
+    //      MUSIC PLAYER LIST
+    public ArrayList<HashMap<String,String>> getPlayList(String rootPath) {
+        ArrayList<HashMap<String,String>> fileList = new ArrayList<>();
+        try {
+            File rootFolder = new File(rootPath);
+            File[] files = rootFolder.listFiles();
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    if (getPlayList(file.getAbsolutePath()) != null) {
+                        fileList.addAll(getPlayList(file.getAbsolutePath()));
+                    } else {
+                        break;
+                    }
+                } else if (file.getName().endsWith(".mp3")) {
+                    HashMap<String, String> song = new HashMap<>();
+                    song.put("file_path", file.getAbsolutePath());
+                    song.put("file_name", file.getName());
+                    fileList.add(song);
+                }
+            }
+            return fileList;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //      LOAD SONGS
+    public void loadSongs(){
+        songList = new ArrayList<>();
+
+        songList = getPlayList(external_path);
+
+        for(HashMap<String,String> new_data: getPlayList(music_path)){
+            songList.add(new_data);
+        }
+
+        for(HashMap<String,String> new_data: getPlayList(download_path)){
+            songList.add(new_data);
+        }
+    }
+
+    //      PLAY SONGS
+    public void playAll(){
+        carMediaPlayer = new MediaPlayer();
+        if (carMediaPlayer.isPlaying()){
+            carMediaPlayer.pause();
+            isPlaying = false;
+        }else{
+            isPlaying = true;
+
+            res = songList.iterator().next();
+            music_index = songList.indexOf(res);
+
+            try {
+                carMediaPlayer.setDataSource(res.get("file_path")+"");
+                carMediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            passSong(res.get("file_name")+"");
+
+            carMediaPlayer.start();
+
+            carMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                if (music_index+1 < songList.size()){
+                    music_index+=1;
+                    res = songList.get(songList.indexOf(music_index));
+                    try {
+                        carMediaPlayer.reset();
+                        carMediaPlayer.setDataSource(res.get("file_path")+"");
+                        carMediaPlayer.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    carMediaPlayer.start();
+                }
+                }
+            });
+        }
+    }
+
+
+    //      NEXT SONGS
+    public void nextSong(){
+        if (carMediaPlayer.isPlaying()){
+            carMediaPlayer.stop();
+            carMediaPlayer = new MediaPlayer();
+            music_index+=1;
+            res = songList.get(music_index);
+            try {
+                carMediaPlayer.reset();
+                carMediaPlayer.setDataSource(res.get("file_path")+"");
+                carMediaPlayer.prepare();
+                passSong(res.get("file_name")+"");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            carMediaPlayer.start();
+
+
+            carMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                if (music_index+1 < songList.size()){
+                    music_index+=1;
+                    res = songList.get(songList.indexOf(res));
+                    try {
+                        carMediaPlayer.reset();
+                        carMediaPlayer.setDataSource(res.get("file_path")+"");
+                        carMediaPlayer.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    carMediaPlayer.start();
+                }
+                }
+            });
+        }
+
+
+    }
+
+    public void passSong(String newSong){
+        Bundle bundPlay = new Bundle();
+        bundPlay.putString("song_name", newSong);
+        frag_music.setArguments(bundPlay);
+    }
+
+
+    //      DAY/NIGHT MODE
     public void checkDayNight(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int dayNight = preferences.getInt("dayNight", 1);
@@ -87,4 +274,30 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterfa
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
+
+
+    //      PERMISSIONS
+    public void checkPermissions(){
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+    }
+
+
+
+
 }
