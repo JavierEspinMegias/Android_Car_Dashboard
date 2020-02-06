@@ -22,15 +22,16 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:clickable="true"
             android:focusable="true" />
 
         <com.android.myapplication.CustomBottomNavigationView
             android:id="@+id/customBottomBar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorAccent"
+            android:backgroundTint="@color/colorOrange"
             app:labelVisibilityMode="labeled" />
 
 
