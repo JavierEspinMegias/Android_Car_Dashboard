@@ -19,8 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInterfaceCom{
 
-    private BottomNavigationView menuBottom;
+    private CustomBottomNavigationView menuBottom;
 
     public ArrayList<HashMap<String,String>> songList;
     final String download_path =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"";
@@ -63,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterfa
 
     //      SET FRAGMENTS ON MENU
     public void loadMenu(){
-        menuBottom = (BottomNavigationView)findViewById(R.id.bottom_navigation);
-        menuBottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        menuBottom = (CustomBottomNavigationView)findViewById(R.id.customBottomBar);
+        menuBottom.setOnNavigationItemSelectedListener(new CustomBottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -73,15 +71,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterfa
                         loadFragment(frag_music).addToBackStack("music").commit();
                         item.setCheckable(false);
                         item.setChecked(false);
-
                         break;
                     case R.id.action_maps:
                         Fragment2 frag2 = Fragment2.newInstance("", "");
                         loadFragment(frag2).addToBackStack("maps").commit();
-                        break;
-                    case 1:
-                        Fragment3 frag3 = Fragment3.newInstance("", "");
-                        loadFragment(frag3).addToBackStack("1").commit();;
                         break;
                     case R.id.action_search:
                         Fragment4 frag4 = Fragment4.newInstance("", "");
@@ -180,39 +173,44 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterfa
             carMediaPlayer.pause();
             isPlaying = false;
         }else{
-            isPlaying = true;
+            if (songList.size()>0){
+                isPlaying = true;
 
-            res = songList.iterator().next();
-            music_index = songList.indexOf(res);
+                res = songList.iterator().next();
+                music_index = songList.indexOf(res);
 
-            try {
-                carMediaPlayer.setDataSource(res.get("file_path")+"");
-                carMediaPlayer.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                try {
+                    carMediaPlayer.setDataSource(res.get("file_path")+"");
+                    carMediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-            passSong(res.get("file_name")+"");
+                passSong(res.get("file_name")+"");
 
-            carMediaPlayer.start();
+                carMediaPlayer.start();
 
-            carMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                if (music_index+1 < songList.size()){
-                    music_index+=1;
-                    res = songList.get(songList.indexOf(music_index));
-                    try {
-                        carMediaPlayer.reset();
-                        carMediaPlayer.setDataSource(res.get("file_path")+"");
-                        carMediaPlayer.prepare();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                carMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        if (music_index+1 < songList.size()){
+                            music_index+=1;
+                            res = songList.get(songList.indexOf(music_index));
+                            try {
+                                carMediaPlayer.reset();
+                                carMediaPlayer.setDataSource(res.get("file_path")+"");
+                                carMediaPlayer.prepare();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            carMediaPlayer.start();
+                        }
                     }
-                    carMediaPlayer.start();
-                }
-                }
-            });
+                });
+
+            }else{
+                Toast.makeText(this, "No songs found", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
