@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+
 
 public class FragSettings extends Fragment {
 
@@ -60,6 +62,7 @@ public class FragSettings extends Fragment {
         downloadPath = (Switch)v.findViewById(R.id.switchSongsDownload);
         musicPath = (Switch)v.findViewById(R.id.switchSongsMusic);
         allPaths = (Switch)v.findViewById(R.id.switchSongsAll);
+
 
         checkDayNight(v);
         checkPaths(v);

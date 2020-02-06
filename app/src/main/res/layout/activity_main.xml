@@ -26,20 +26,35 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:transitionName="transition"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorlayout"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"></FrameLayout>
+        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
     <RelativeLayout
         android:id="@+id/coordinatorlayout"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="86dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <com.android.myapplication.CustomBottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/customBottomBar"
+            app:menu="@menu/bottom_menu"
+            android:defaultFocusHighlightEnabled="false"
+            android:layout_alignParentBottom="true"
+            app:labelVisibilityMode="labeled"
+            app:itemHorizontalTranslationEnabled="false"
+            android:focusedByDefault="false"
+            android:backgroundTint="@color/colorOrange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -48,25 +63,10 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="12dp"
-            android:elevation="11dp"
-            android:background="@android:drawable/star_big_on"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:elevation="24dp"
+            android:src="@drawable/ic_micro"
+            android:backgroundTint="@color/colorAccent"
             android:clickable="true"
             android:focusable="true" />
-
-        <com.android.myapplication.CustomBottomNavigationView
-            android:id="@+id/customBottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_alignParentBottom="true"
-            android:backgroundTint="@color/colorOrange"
-            app:labelVisibilityMode="labeled"
-            app:itemHorizontalTranslationEnabled="false"
-            android:focusedByDefault="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/bottom_menu"
-            android:defaultFocusHighlightEnabled="true" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

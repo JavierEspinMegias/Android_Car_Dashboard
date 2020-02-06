@@ -13,53 +13,55 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
 
             <Switch
                 android:id="@+id/switchDay"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18dp"
                 android:switchMinWidth="90dp"
                 android:button="@android:drawable/btn_radio"
-                android:switchPadding="22dp"
+                android:switchPadding="32dp"
                 android:text="Day Night Mode" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <Switch
                 android:id="@+id/switchSongsDownload"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:switchMinWidth="90dp"
                 android:textSize="18dp"
                 android:button="@android:drawable/btn_radio"
-                android:switchPadding="44dp"
+                android:switchPadding="32dp"
                 android:text="Add Download Folder" />
 
             <Switch
                 android:id="@+id/switchSongsMusic"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:switchMinWidth="90dp"
                 android:textSize="18dp"
                 android:button="@android:drawable/btn_radio"
-                android:switchPadding="44dp"
+                android:switchPadding="32dp"
                 android:text="Add Music Folder" />
 
             <Switch
                 android:id="@+id/switchSongsAll"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:switchMinWidth="90dp"
                 android:textSize="18dp"
                 android:button="@android:drawable/btn_radio"
-                android:switchPadding="44dp"
+                android:switchPadding="32dp"
                 android:text="Add All Music Paths" />
         </LinearLayout>
     </LinearLayout>

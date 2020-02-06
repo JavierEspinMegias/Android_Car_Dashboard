@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity implements OnFragmentInterfaceCom{
 
     private CustomBottomNavigationView menuBottom;
+    private BottomNavigationItemView invi;
 
     public ArrayList<HashMap<String,String>> songList;
     final String download_path =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"";
@@ -53,8 +56,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterfa
         isPlaying = false;
         loadSongs();
 
+
         loadMenu();
 
+        invi = (BottomNavigationItemView)findViewById(R.id.action_add);
+        invi.setClickable(false);
 
     }
 
@@ -69,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterfa
                     case R.id.action_music:
                         frag_music = FragmentMusic.newInstance("", "");
                         loadFragment(frag_music).addToBackStack("music").commit();
-                        item.setCheckable(false);
-                        item.setChecked(false);
                         break;
                     case R.id.action_maps:
                         Fragment2 frag2 = Fragment2.newInstance("", "");
@@ -88,8 +92,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterfa
 
                 return true;
             }
-        })
-    ;}
+        });
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
 
 
     public FragmentTransaction loadFragment(Fragment loadFrag){

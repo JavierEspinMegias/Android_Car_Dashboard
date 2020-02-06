@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -69,6 +71,8 @@ public class FragmentMusic extends Fragment {
         next = (Button) v.findViewById(R.id.but_next);
         song_a = (TextView)v.findViewById(R.id.song_a);
         song_t = (TextView)v.findViewById(R.id.song_t);
+
+
 
         if (getArguments() != null && getArguments().getString("song_name")!=null) {
             getSong();
