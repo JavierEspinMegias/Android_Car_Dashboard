@@ -43,7 +43,7 @@
 
         <com.android.myapplication.CustomBottomNavigationView
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="52dp"
             android:id="@+id/customBottomBar"
             app:menu="@menu/bottom_menu"
             android:defaultFocusHighlightEnabled="false"
@@ -62,10 +62,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="16dp"
             android:elevation="24dp"
             android:src="@drawable/ic_micro"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimary"
             android:clickable="true"
             android:focusable="true" />
     </RelativeLayout>

@@ -86,9 +86,11 @@ public class CustomBottomNavigationView extends BottomNavigationView {
         mPath.moveTo(0, 0);
         mPath.lineTo(mFirstCurveStartPoint.x+CURVE_CIRCLE_RADIUS+34, mFirstCurveStartPoint.y);
 
+
         mPath.cubicTo(mFirstCurveControlPoint1.x, mFirstCurveControlPoint1.y,
                 mFirstCurveControlPoint2.x, mFirstCurveControlPoint2.y,
                 mFirstCurveEndPoint.x, mFirstCurveEndPoint.y);
+
 
         mPath.cubicTo(mSecondCurveControlPoint1.x, mSecondCurveControlPoint1.y,
             mSecondCurveControlPoint2.x, mSecondCurveControlPoint2.y,
