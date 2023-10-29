@@ -20,14 +20,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/music"
-                    android:textSize="32dp"
-                    android:textStyle="bold"/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -72,30 +64,48 @@
                         android:id="@+id/but_play"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginHorizontal="2dp"
                         android:backgroundTint="@color/colorOrange"
                         android:layout_weight="0.3"
                         style="@style/buttonsMusic"
                         android:text="Play" />
 
                     <Button
+                        android:id="@+id/but_prev"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="2dp"
+                        android:backgroundTint="@color/colorOrange"
+                        android:layout_weight="0.3"
+                        style="@style/buttonsMusic"
+                        android:text="Previous" />
+
+                    <Button
                         android:id="@+id/but_next"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
-                        android:layout_marginHorizontal="6dp"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:layout_weight="0.4"
+                        android:layout_marginHorizontal="2dp"
+                        android:backgroundTint="@color/colorOrange"
+                        android:layout_weight="0.3"
                         style="@style/buttonsMusic"
                         android:text="Next" />
                     <Button
                         android:id="@+id/but_stop"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginHorizontal="2dp"
                         android:backgroundTint="@color/colorOrange"
                         android:layout_weight="0.3"
                         style="@style/buttonsMusic"
                         android:text="Stop" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_song_list"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="0.3"
+                        android:layout_marginHorizontal="2dp"
+                        android:layout_height="match_parent">
+
+                    </androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>
 

@@ -35,7 +35,8 @@ public class FragmentMusic extends Fragment {
     public HashMap res;
     public TextView song_t, song_a;
 
-
+    private SongListAdapter songAdapter;
+    private ArrayList<HashMap<String, String>> allSongs;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -58,7 +59,11 @@ public class FragmentMusic extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+
+        if (getArguments() != null && getArguments().getString("song_name")!=null) {
+            getSong();
+        }else if (getArguments() != null && getArguments().get("songs")!=null){
+            allSongs = (ArrayList<HashMap<String, String>>) getArguments().get("songs");
         }
     }
 
@@ -72,21 +77,13 @@ public class FragmentMusic extends Fragment {
         song_a = (TextView)v.findViewById(R.id.song_a);
         song_t = (TextView)v.findViewById(R.id.song_t);
 
-
-
-        if (getArguments() != null && getArguments().getString("song_name")!=null) {
-            getSong();
-        }
-
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onChange("playing_music", mediaPlayer );
+                onChange("playing_music", mediaPlayer);
                 getSong();
             }
         });
-
 
 
         stop.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +100,12 @@ public class FragmentMusic extends Fragment {
                 getSong();
             }
         });
+
+        RecyclerView recyclerSongs = (RecyclerView) v.findViewById(R.id.recycler_song_list);
+        LinearLayoutManager lManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        songAdapter = new SongListAdapter(allSongs);
+        recyclerSongs.setAdapter(songAdapter);
+        recyclerSongs.setLayoutManager(lManager);
 
         return v;
     }
@@ -151,5 +154,6 @@ public class FragmentMusic extends Fragment {
             mListener.onFragmentMessage(info, data);
         }
     }
+
 
 }

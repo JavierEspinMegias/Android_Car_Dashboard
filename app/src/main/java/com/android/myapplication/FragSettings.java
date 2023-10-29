@@ -81,6 +81,7 @@ public class FragSettings extends Fragment {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     editor.putInt("dayNight", AppCompatDelegate.MODE_NIGHT_NO).apply();
                 }
+                editor.commit();
             }
         });
 
@@ -96,6 +97,7 @@ public class FragSettings extends Fragment {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     editor.putInt("downloadPath", 0).apply();
                 }
+                editor.commit();
             }
         });
 
@@ -110,6 +112,7 @@ public class FragSettings extends Fragment {
                 }else{
                     editor.putInt("musicPath", 0).apply();
                 }
+                editor.commit();
             }
         });
 
@@ -125,11 +128,9 @@ public class FragSettings extends Fragment {
                 }else{
                     editor.putInt("allPaths", 0).apply();
                 }
+                editor.commit();
             }
         });
-
-
-
 
 
         return v;
